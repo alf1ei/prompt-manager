@@ -6,10 +6,10 @@ export type Prompt = {
 export type PromptDraft = Pick<Prompt, "title" | "description" | "content" | "category" | "tags" | "favorite">;
 
 export function extractVariables(content: string): string[] {
-  return [...new Set(Array.from(content.matchAll(/{{\\s*([\\w.-]+)\\s*}}/g), m => m[1]))];
+  return [...new Set(Array.from(content.matchAll(/{{\s*([\w.-]+)\s*}}/g), m => m[1]))];
 }
 export function renderTemplate(content: string, values: Record<string, string>): string {
-  return content.replace(/{{\\s*([\\w.-]+)\\s*}}/g, (match, key: string) => values[key] ?? match);
+  return content.replace(/{{\s*([\w.-]+)\s*}}/g, (match, key: string) => values[key] ?? match);
 }
 export function makeVersion(content: string): PromptVersion {
   return { id: globalThis.crypto?.randomUUID?.() ?? String(Date.now()), content, savedAt: new Date().toISOString() };
